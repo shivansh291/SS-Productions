@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SS Productions | Creative Digital Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --card-bg: #1e1e1e;
+            --primary: #00ff88;
+            --primary-glow: rgba(0, 255, 136, 0.3);
+            --text: #e0e0e0;
+            --text-secondary: #b0b0b0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to bottom, var(--darker-bg), transparent);
+            padding: 30px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            background: var(--darker-bg);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px var(--primary-glow);
+            animation: pulse 2s infinite;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        section {
+            padding: 100px 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero {
+            text-align: center;
+            background: radial-gradient(circle at center, var(--primary-glow), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.1;
+            z-index: -1;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(100px);
+            opacity: 0.05;
+            z-index: -1;
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite 2s;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+          margin-top: 20px;
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Responsive Rotating Icons Circle */
+        .services-container {
+            position: relative;
+            width: 100%;
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .services-orbit {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            aspect-ratio: 1/1;
+            margin: 0 auto;
+        }
+        
+        .service-icon {
+            position: absolute;
+            width: 15%;
+            aspect-ratio: 1/1;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(18px, 3vw, 28px);
+            color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            transition: all 0.3s ease;
+            z-index: 2;
+            transform-origin: center;
+        }
+        
+        .service-icon:hover {
+            transform: scale(1.3);
+            background-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        
+        .service-icon::after {
+            content: attr(data-service);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(10px, 2vw, 14px);
+            color: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .service-icon:hover::after {
+            opacity: 1;
+        }
+        
+        .orbit-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle linear infinite;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--primary-glow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .about-text p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+        
+        .expertise {
+            background-color: var(--darker-bg);
+            position: relative;
+        }
+        
+        .expertise::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(100px);
+            opacity: 0.05;
+            z-index: 0;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .expertise-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            transform: perspective(1000px) rotateY(20deg);
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .expertise-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                var(--primary-glow)
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        
+        .expertise-card:hover::before {
+            opacity: 0.3;
+            top: -20%;
+            left: -20%;
+        }
+        
+        .expertise-card.visible {
+            transform: perspective(1000px) rotateY(0deg);
+            opacity: 1;
+        }
+        
+        .expertise-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .expertise-card i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .expertise-card:hover i {
+            transform: scale(1.2);
+        }
+        
+        .expertise-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .expertise-card p {
+            color: var(--text-secondary);
+        }
+        
+        .contact {
+            position: relative;
+        }
+        
+        .contact::before {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.1;
+            z-index: -1;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite 2s;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--darker-bg);
+            color: var(--text-secondary);
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+        
+        .email-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .email-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+            
+            .about-content {
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: var(--darker-bg);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                gap: 15px;
+                transform: translateY(-150%);
+                transition: transform 0.4s ease;
+                z-index: 99;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 30px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            section {
+                padding: 80px 0;
+            }
+            
+            .services-orbit {
+                max-width: 280px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .expertise-card {
+                padding: 20px;
+            }
+            
+            .services-orbit {
+                max-width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo"><span></span>SS Productions</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#about">About</a>
+                    <a href="#expertise">Expertise</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Transforming Ideas Into Digital Excellence</h1>
+                <p>We are SS Productions, a creative digital solutions provider specializing in web development, video editing, photo editing, PPT designing, and data handling services that help businesses stand out in the digital landscape.</p>
+                <a href="#contact" class="btn">Get in Touch</a>
+            </div>
+            
+            <!-- Responsive Rotating Services Circle -->
+            <div class="services-container">
+                <div class="services-orbit">
+                    <div class="orbit-path"></div>
+                    <div class="floating-particles" id="particles"></div>
+                    <div class="service-icon" data-service="Web Development">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="service-icon" data-service="Video Editing">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="service-icon" data-service="Photo Editing">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="service-icon" data-service="PPT Designing">
+                        <i class="fas fa-file-powerpoint"></i>
+                    </div>
+                    <div class="service-icon" data-service="Data Handling">
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Crafting Digital Experiences Since 2020</h3>
+                    <p>At SS Productions, we blend creativity with technology to deliver exceptional digital solutions tailored to your unique needs. Our team of skilled professionals is dedicated to transforming your vision into reality.</p>
+                    <p>We believe in the power of collaboration and work closely with our clients to understand their goals, ensuring every project we undertake exceeds expectations.</p>
+                    <p>Whether you need a stunning website, professional video content, polished images, engaging presentations, or meticulous data organization, we've got you covered.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="expertise" class="expertise">
+        <div class="container">
+            <h2 class="section-title">Our Expertise</h2>
+            <div class="expertise-grid">
+                <div class="expertise-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development</h3>
+                    <p>Custom websites and web applications built with modern technologies to ensure performance, security, and scalability.</p>
+                </div>
+                <div class="expertise-card">
+                    <i class="fas fa-video"></i>
+                    <h3>Video Editing</h3>
+                    <p>Professional video editing services including color grading, motion graphics, and special effects to make your content stand out.</p>
+                </div>
+                <div class="expertise-card">
+                    <i class="fas fa-image"></i>
+                    <h3>Photo Editing</h3>
+                    <p>High-quality photo retouching, background removal, color correction, and creative manipulation services.</p>
+                </div>
+                <div class="expertise-card">
+                    <i class="fas fa-file-powerpoint"></i>
+                    <h3>PPT Designing</h3>
+                    <p>Engaging and professional presentation design that communicates your message effectively and impresses your audience.</p>
+                </div>
+                <div class="expertise-card">
+                    <i class="fas fa-database"></i>
+                    <h3>Data Handling</h3>
+                    <p>Efficient data organization, analysis, and visualization to help you make informed business decisions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-form">
+                <form action="https://formspree.io/f/xqaqbzgy" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Interested In</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="web-development">Web Development</option>
+                            <option value="video-editing">Video Editing</option>
+                            <option value="photo-editing">Photo Editing</option>
+                            <option value="ppt-designing">PPT Designing</option>
+                            <option value="data-handling">Data Handling</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 SS Productions. All rights reserved.</p>
+            <p>Email us at: <a href="mailto:ss.productions.1989@gmail.com" class="email-link">ss.productions.1989@gmail.com</a></p>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Scroll animations
+        const sections = document.querySelectorAll('section');
+        
+        const checkVisibility = () => {
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (sectionTop < windowHeight - 100) {
+                    section.classList.add('visible');
+                    
+                    // Animate expertise cards with staggered delay
+                    if (section.id === 'expertise') {
+                        const cards = document.querySelectorAll('.expertise-card');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, index * 150);
+                        });
+                    }
+                }
+            });
+        };
+        
+        // Check visibility on load and scroll
+        window.addEventListener('load', checkVisibility);
+        window.addEventListener('scroll', checkVisibility);
+        
+        // Form submission handling
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Thank you for your message! We will get back to you soon.');
+                    form.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                alert('There was a problem sending your message. Please try again later.');
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+        
+        // Perfect Circle Animation with Icons
+        const servicesOrbit = document.querySelector('.services-orbit');
+        const serviceIcons = document.querySelectorAll('.service-icon');
+        let angle = 0;
+        
+        function positionIcons() {
+            const radius = servicesOrbit.offsetWidth / 2;
+            const center = radius;
+            
+            serviceIcons.forEach((icon, index) => {
+                const iconAngle = angle + (index * (2 * Math.PI / serviceIcons.length));
+                const x = center + (radius * 0.8) * Math.cos(iconAngle) - icon.offsetWidth / 2;
+                const y = center + (radius * 0.8) * Math.sin(iconAngle) - icon.offsetHeight / 2;
+                
+                icon.style.left = `${x}px`;
+                icon.style.top = `${y}px`;
+            });
+            
+            angle += 0.005;
+            requestAnimationFrame(positionIcons);
+        }
+        
+        positionIcons();
+        
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 20;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size between 2px and 5px
+            const size = Math.random() * 3 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.bottom = `-${size}px`;
+            
+            // Random animation duration between 10s and 20s
+            const duration = Math.random() * 10 + 10;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Random delay
+            particle.style.animationDelay = `${Math.random() * 10}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Add hover effect to service icons
+        serviceIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                icon.style.transform = 'scale(1.3)';
+                icon.style.backgroundColor = 'var(--primary)';
+                icon.style.color = '#000';
+            });
+            
+            icon.addEventListener('mouseleave', () => {
+                icon.style.transform = 'scale(1)';
+                icon.style.backgroundColor = 'var(--card-bg)';
+                icon.style.color = 'var(--primary)';
+            });
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Recalculate icon positions on resize
+            angle = 0;
+        });
+    </script>
+</body>
+</html>
